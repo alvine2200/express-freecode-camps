@@ -1,30 +1,35 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const port = 300;
+const port = 3000;
+const tasks = require("./routes/tasks");
+
 const app = express();
 
-//get all tasks
-app.get("/api/v1/tasks", (req, res) => {
-  //perform tasks here
+app.get("/", (req, res) => {
+  res.send("Hello home");
 });
 
+app.use(express.json());
+//get all tasks
+app.use("/api/v1/tasks", tasks);
+
 //create new tasks
-app.post("/api/vi/create", (req, res) => {
+app.post("/api/vi/tasks", (req, res) => {
   //perform tasks here
 });
 
 //edit tasks
-app.get("api/v1/edit_tasks/:id", (req, res) => {
+app.get("api/v1/tasks/:id", (req, res) => {
   //perform tasks here
 });
 
 //update tasks
-app.put("api/v1/update_task/:id", (req, res) => {
+app.put("api/v1/tasks/:id", (req, res) => {
   //perform tasks here
 });
 
 //delete task
-app.delete("api/v1/delete_tasks/:id", (req, res) => {
+app.delete("api/v1/tasks/:id", (req, res) => {
   //perform tasks here
 });
 
