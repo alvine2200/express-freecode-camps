@@ -1,8 +1,7 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const port = 3000;
 const tasks = require("./routes/tasks");
-require("./databse/connection");
+const connectDB = require("./databse/connection");
 
 const app = express();
 
@@ -34,6 +33,16 @@ app.delete("api/v1/tasks/:id", (req, res) => {
   //perform tasks here
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+const start = async () => {
+  try {
+    await connectDB();
+    console.log("Database connected...");
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
