@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const port = 3000;
 const tasks = require("./routes/tasks");
+require("./databse/connection");
 
 const app = express();
 
