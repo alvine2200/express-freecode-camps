@@ -1,9 +1,12 @@
+const Tasks = require("../models/TaskModel");
+
 const getAllTasks = (req, res) => {
   res.send("Tasks in the controllers");
 };
 
-const createTask = (req, res) => {
-  res.json(req.body);
+const createTask = async (req, res) => {
+  const task = await Tasks.create(req.body);
+  res.status(201).json({ task });
 };
 
 const editTask = (req, res) => {
