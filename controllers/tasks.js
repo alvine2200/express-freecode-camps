@@ -3,18 +3,18 @@ const Tasks = require("../models/TaskModel");
 const getAllTasks = async (req, res) => {
   try {
     const task = await Tasks.find({});
-    res.status(200).json({ task });
+    return res.status(200).json({ task });
   } catch (error) {
-    res.status(500).json({ status: error.errors.name.message });
+    return res.status(500).json({ status: error.errors.name.message });
   }
 };
 
 const createTask = async (req, res) => {
   try {
     const task = await Tasks.create(req.body);
-    res.status(201).json({ task });
+    return res.status(201).json({ task });
   } catch (error) {
-    res.status(500).json({ status: error.errors.name.message });
+    return res.status(500).json({ status: error.errors.name.message });
   }
 };
 
@@ -25,18 +25,42 @@ const editTask = async (req, res) => {
     if (!task) {
       return res.status(404).json({ status: `No task with id: ${taskID}` });
     }
-    res.status(200).json({ task });
+    return res.status(200).json({ task });
   } catch (error) {
-    res.status(500).json({ status: error.message });
+    return res.status(500).json({ status: error });
   }
 };
 
-const updateTask = (req, res) => {
-  res.send("update a task");
+const updateTask = async (req, res) => {
+  try {
+    const { id: taskID } = req.params;
+    const task = await Tasks.findByIdAndUpdate({ _id: taskID }, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!task) {
+      return res.status(404).json({ status: `No task with id: ${taskID}` });
+    }
+    return res.status(200).json({ task });
+  } catch (error) {
+    return res.status(500).json({ status: error });
+  }
 };
 
-const deleteTask = (req, res) => {
-  res.send("delete a task");
+const deleteTask = async (req, res) => {
+  try {
+    const { id: taskID } = req.params;
+    const task = await Tasks.findByIdAndDelete({ _id: taskID });
+    if (!task) {
+      res.status(404).json(`id not found ${taskID}`);
+      return;
+    }
+    res.status(200).json({ task: null, status: "success" });
+    return;
+  } catch (error) {
+    res.status(500).json({ status: error });
+    return;
+  }
 };
 
 module.exports = {
