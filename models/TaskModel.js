@@ -7,7 +7,10 @@ const TaskSchema = new mongoose.Schema({
     maxlength: [20, "Characters should be less than 20"],
     trim: true,
   },
-  completed: Boolean,
+  completed: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Task", TaskSchema);
