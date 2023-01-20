@@ -4,11 +4,11 @@ const {
   getAllTasks,
   createTask,
   editTask,
-  updateTask,
+  updateTask,  
   deleteTask,
 } = require("../controllers/tasks");
 
 router.route("/").get(getAllTasks).post(createTask);
 router.route("/:id").get(editTask).put(updateTask).delete(deleteTask);
 
-module.exports = router;
+module.exports = router;  
