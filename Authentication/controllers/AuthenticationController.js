@@ -1,11 +1,15 @@
 const User = require("../models/AuthenticationModel");
 
 const register = async (req, res) => {
-  console("register fields here...");
+  res.send("register fields here...");
 };
 
 const login = async (req, res) => {
-  console.log("login fields over here...");
+  res.send("login fields over here...");
 };
 
-module.exports = { register, login };
+const dashboard = async (req, res) => {
+  res.send("Welcome to dashboard lad ...");
+};
+
+module.exports = { register, login, dashboard };
