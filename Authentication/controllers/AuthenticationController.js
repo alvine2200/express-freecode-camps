@@ -1,5 +1,6 @@
 const User = require("../models/AuthenticationModel");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const register = async (req, res) => {
   res.send("register fields here...");
@@ -14,7 +15,7 @@ const login = async (req, res) => {
   }
   const id = new Date().getTime();
   const token = jwt.sign({ id, email }, process.env.JWT_TOKEN, {
-    expiresIn: "30d",
+    expiresIn: "10d",
   });
   console.log(token);
   return res
@@ -23,11 +24,10 @@ const login = async (req, res) => {
 };
 
 const dashboard = async (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(403).json(`Not Auhorized to view this page`);
-  }
-  return res.status(200).json({ status: "success", message: "token found" });
+  console.log(req.user);
+  return res
+    .status(200)
+    .json({ status: "success", message: "user found " + req.user });
 };
 
 module.exports = { register, login, dashboard };
