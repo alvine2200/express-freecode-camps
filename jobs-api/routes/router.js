@@ -1,8 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const { home, login, register } = require("../controllers/UserController");
+const {
+  getJobs,
+  createJob,
+  editJob,
+  updateJob,
+  deleteJob,
+} = require("../controllers/JobsController");
 
-router.route("/").get(home);
+router.route("/home").get(home);
 router.route("/register").post(register);
 router.route("/login").post(login);
 

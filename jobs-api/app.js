@@ -14,14 +14,13 @@ app.use("api/v1/", router);
 
 const start = async (req, res) => {
   try {
-    await connectDB(conn);
-    console.log("database connected successfully");
+    // await connectDB(conn);
+    // console.log("database connected successfully");
     app.listen(port, () => {
       console.log(`App is running on port ${port}`);
     });
   } catch (error) {
     console.log(error);
-    // res.status(500).json({ status: "fail", reason: error });
   }
 };
 
