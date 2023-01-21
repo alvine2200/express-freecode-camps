@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
-const { isEmail } = require("express-validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -19,5 +22,27 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+UserSchema.pre("save", async function (next) {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+//create token respective of users
+UserSchema.methods.createJwt = async function () {
+  return jwt.sign(
+    { userId: this._id, name: this.name },
+    process.env.JWT_TOKEN,
+    {
+      expiresIn: process.env.JWT_TIME,
+    }
+  );
+};
+
+//this can be passed to controller and name attribute displayed
+UserSchema.methods.getName = function () {
+  return this.name;
+};
 
 module.exports = mongoose.model("User", UserSchema);
