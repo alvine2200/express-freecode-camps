@@ -9,10 +9,14 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    index: {
+      unique: true,
+    },
     maxlength: [30, "email should not be more than 30 characters"],
   },
   password: {
     type: String,
+    required: true,
   },
 });
 
