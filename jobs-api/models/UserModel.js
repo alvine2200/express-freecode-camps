@@ -45,4 +45,10 @@ UserSchema.methods.getName = function () {
   return this.name;
 };
 
+//compare password during login
+UserSchema.methods.isPasswordCorrect = async function (userPassword) {
+  const isPassword = await bcrypt.compare(userPassword, this.password);
+  return isPassword;
+};
+
 module.exports = mongoose.model("User", UserSchema);

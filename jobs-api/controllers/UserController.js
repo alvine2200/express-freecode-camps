@@ -26,7 +26,39 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  res.send("login page");
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({
+        status: "failed",
+        message: "Please complete your details and submit again",
+      });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({
+        status: "failed",
+        message: "User not found, Enter correct details",
+      });
+    }
+
+    const isMatch = await user.isPasswordCorrect(password);
+    if (!isMatch) {
+      return res.status(401).json({
+        status: "failed",
+        message: "Invalid credentials, try again",
+      });
+    }
+    const token = await jwt.createJwt();
+    return res
+      .status(200)
+      .json({ status: "successful", data: user, token: token });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(401)
+      .json({ status: "failed", message: "something went wrong" });
+  }
 };
 
 const home = async (req, res) => {
