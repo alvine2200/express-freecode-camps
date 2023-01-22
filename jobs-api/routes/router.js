@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middlewares/authMiddleware");
 const { home, login, register } = require("../controllers/UserController");
 const {
   getJobs,
@@ -9,11 +10,15 @@ const {
   deleteJob,
 } = require("../controllers/JobsController");
 
-router.route("/home").get(home);
+router.route("/home").get(auth, home);
 router.route("/register").post(register);
 router.route("/login").post(login);
 
-router.route("/jobs").get(getJobs).post(createJob);
-router.route("/jobs/:id").get(editJob).patch(updateJob).delete(deleteJob);
+router.route("/jobs").get(auth, getJobs).post(auth, createJob);
+router
+  .route("/jobs/:id")
+  .get(auth, editJob)
+  .patch(auth, updateJob)
+  .delete(auth, deleteJob);
 
 module.exports = router;

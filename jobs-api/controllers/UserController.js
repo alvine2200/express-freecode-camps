@@ -41,7 +41,6 @@ const login = async (req, res) => {
         message: "User not found, Enter correct details",
       });
     }
-
     const isMatch = await user.isPasswordCorrect(password);
     if (!isMatch) {
       return res.status(401).json({
@@ -49,7 +48,7 @@ const login = async (req, res) => {
         message: "Invalid credentials, try again",
       });
     }
-    const token = await jwt.createJwt();
+    const token = await user.createJwt();
     return res
       .status(200)
       .json({ status: "successful", data: user, token: token });
