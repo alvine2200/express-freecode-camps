@@ -8,7 +8,16 @@ const register = async (req, res) => {
     // const salt = await bcrypt.genSalt(10);
     // const hashedPassword = await bcrypt.hash(password, salt);
     // const tempUser = await { name, email, password: hashedPassword };
-
+    const checkEmail = async function () {
+      const { email } = req.body;
+      const mail = User.findOne({ email });
+      if (mail) {
+        return res
+          .status(500)
+          .json({ status: "failed", message: "email already taken" });
+      }
+    };
+    checkEmail();
     const user = await User.create({ ...req.body });
     const token = await user.createJwt();
     if (user) {
