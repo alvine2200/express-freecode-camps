@@ -10,7 +10,7 @@ const register = async (req, res) => {
     // const tempUser = await { name, email, password: hashedPassword };
     const checkEmail = async function () {
       const { email } = req.body;
-      const mail = User.findOne({ email });
+      const mail = await User.findOne({ email });
       if (mail) {
         return res
           .status(500)

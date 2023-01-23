@@ -3,10 +3,26 @@ const connectDB = require("./db/connectionDB");
 const conn = process.env.MONGO_URL;
 const router = require("./routes/router");
 
+//SECURITY PACKAGES
+const rateLimit = require("express-rate-limit");
+const cors = require("cors");
+const xss = require("xss-clean");
+const helmet = require("helmet");
+
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
 
+//enable if behind proxy by app.set('trust proxy',1)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, //request per 15minutes
+  max: 100, //limit 100 requests to 15minutes
+});
+
+app.use(limiter());
+app.use(cors());
+app.use(xss());
+app.use(helmet());
 app.use(express.static("public"));
 app.use(express.json());
 
