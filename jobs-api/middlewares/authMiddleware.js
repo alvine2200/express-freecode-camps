@@ -14,6 +14,8 @@ const auth = async (req, res, next) => {
   try {
     //verify jwt token
     const payload = jwt.verify(token, process.env.JWT_TOKEN);
+    // const user = User.findById(payload.id).select("-password");
+    // req.user = user;
     //pass to user routes
     req.user = { userId: payload.userId, name: payload.name };
     next();
