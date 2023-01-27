@@ -4,7 +4,10 @@ require("dotenv").config();
 const AuthenticationMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(403).json(`Not Auhorized to view this page`);
+    return res.status(403).json({
+      status: "success",
+      message: `Not Auhorized to view this page,Login first`,
+    });
   }
   const token = authHeader.split(" ")[1];
   try {

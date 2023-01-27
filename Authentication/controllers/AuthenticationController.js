@@ -30,4 +30,16 @@ const dashboard = async (req, res) => {
     .json({ status: "success", message: "user found " + req.user });
 };
 
-module.exports = { register, login, dashboard };
+const ChangePassword = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    
+  }
+};
+
+const ResetPassword = async (req, res) => {
+  res.send("reset-password page");
+};
+
+module.exports = { register, login, dashboard, ChangePassword, ResetPassword };
