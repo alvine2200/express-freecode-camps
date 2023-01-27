@@ -19,7 +19,7 @@ const limiter = rateLimit({
   max: 100, //limit 100 requests to 15minutes
 });
 
-app.use(limiter());
+// app.use(limiter());
 app.use(cors());
 app.use(xss());
 app.use(helmet());

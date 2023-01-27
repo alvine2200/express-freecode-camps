@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/UserModel");
 const jwt = require("jsonwebtoken");
+const validator = require("node-input-validator");
 
 const register = async (req, res) => {
   try {
@@ -70,7 +71,14 @@ const login = async (req, res) => {
 };
 
 const home = async (req, res) => {
-  res.send("registration page");
+  res.send("home page");
 };
 
-module.exports = { home, login, register };
+const ChangePassword = async (req, res) => {
+  
+};
+const ResetPassword = async (req, res) => {
+  res.send("reset page");
+};
+
+module.exports = { home, login, register, ChangePassword, ResetPassword };
