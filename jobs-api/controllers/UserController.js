@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../models/UserModel");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const validator = require("node-input-validator");
 
@@ -75,7 +76,35 @@ const home = async (req, res) => {
 };
 
 const ChangePassword = async (req, res) => {
-  
+  try {
+    const { old_password, password } = req.body;
+    const user = await User.findOne({ _id: req.user.userId });
+
+    if (await bcrypt.compare(old_password, user.password)) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      const newPassword = await user.updateOne({
+        password: hashedPassword,
+      });
+
+      return res.status(200).json({
+        status: "success",
+        message: "Password Changed successfully... ",
+      });
+    } else {
+      return res.status(400).json({
+        status: "failed",
+        message:
+          "Old password is wrong, Can't proceed with change password, try again... ",
+      });
+    }
+  } catch (error) {
+    return res.status(400).json({
+      status: "failed",
+      message: error,
+    });
+  }
 };
 const ResetPassword = async (req, res) => {
   res.send("reset page");
