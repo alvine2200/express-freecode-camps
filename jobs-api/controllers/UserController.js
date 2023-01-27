@@ -2,7 +2,9 @@ const express = require("express");
 const User = require("../models/UserModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 const validator = require("node-input-validator");
+require("dotenv").config();
 
 const register = async (req, res) => {
   try {
@@ -107,7 +109,39 @@ const ChangePassword = async (req, res) => {
   }
 };
 const ResetPassword = async (req, res) => {
-  res.send("reset page");
+  try {
+    const text = {
+      status: "please set the password below",
+      mesage: "follow this link...",
+    };
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT || 587,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: process.env.USER_SENDING_EMAIL,
+      to: req.body.email,
+      subject: "Password_Reset_Email",
+      text: "hello there",
+    });
+    console.log("email sent");
+    return res.status(200).json({
+      status: "success",
+      message: "Email Sent successfully... ",
+    });
+  } catch (error) {
+    console.log(error, "email not sent");
+    return res.status(500).json({
+      status: "failed",
+      message: "Email not sent... ",
+    });
+  }
 };
 
 module.exports = { home, login, register, ChangePassword, ResetPassword };
