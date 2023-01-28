@@ -26,6 +26,7 @@ app.use(helmet());
 app.use(express.static("public"));
 app.use(express.json());
 
+app.set("view engine", "ejs");
 app.use("/api/v1/", router);
 
 const start = async (req, res) => {

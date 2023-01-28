@@ -128,7 +128,7 @@ const ResetPassword = async (req, res) => {
       from: process.env.USER_SENDING_EMAIL,
       to: req.body.email,
       subject: "Password_Reset_Email",
-      text: "hello there",
+      text: "hello there here is the reset link http://localhost:3000/api/vi/reset_password",
     });
     console.log("email sent");
     return res.status(200).json({
