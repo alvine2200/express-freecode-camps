@@ -1,5 +1,6 @@
 const User = require("../models/AuthenticationModel");
 const jwt = require("jsonwebtoken");
+const validator = require("node-input-validator");
 require("dotenv").config();
 
 const register = async (req, res) => {
@@ -32,10 +33,11 @@ const dashboard = async (req, res) => {
 
 const ChangePassword = async (req, res) => {
   try {
-    
-  } catch (error) {
-    
-  }
+    const { email, old_password, password, password_confirmation } = req.body;
+    const user = await User.findOne({ email: email });
+    if (await jwt.verify(password, user.email)) {
+    }
+  } catch (error) {}
 };
 
 const ResetPassword = async (req, res) => {
