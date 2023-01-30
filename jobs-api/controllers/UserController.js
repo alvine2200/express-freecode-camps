@@ -3,6 +3,7 @@ const User = require("../models/UserModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const mailgen = require("mailgen");
 const validator = require("node-input-validator");
 require("dotenv").config();
 
@@ -62,6 +63,7 @@ const login = async (req, res) => {
       });
     }
     const token = await user.createJwt();
+    sendMail();
     return res
       .status(200)
       .json({ status: "successful", data: user, token: token });
@@ -110,6 +112,7 @@ const ChangePassword = async (req, res) => {
 };
 
 const sendMail = async (req, res) => {
+  const { email } = req.body;
   const config = {
     service: "gmail",
     auth: {
@@ -117,9 +120,52 @@ const sendMail = async (req, res) => {
       password: process.env.password,
     },
   };
+  const transporter = await nodemailer.createTransport(config);
 
-  const transporter=await nodemailer.createTransport(config);
+  let MailGenerator = new mailgen({
+    theme: "default",
+    product: {
+      name: "Mailgen",
+      link: "https://mailgen.js",
+    },
+  });
+
+  let response = {
+    body: {
+      name: "Alvine registration Syatem",
+      intro: "Your monthly bill has arrived",
+      table: {
+        data: [
+          {
+            item: "Nodemailer testing gmail setup",
+            description: "description for product goes in here",
+            price: "10500.00 ksh.",
+          },
+        ],
+      },
+      outro: "Looking forward to more business",
+    },
+  };
+
+  let mail = MailGenerator.generate(response);
+
+  let message = {
+    from: process.env.user,
+    to: email,
+    subject: "registration email",
+    html: mail,
+  };
+
+  transporter
+    .sendMail(message)
+    .then((message) => {
+      console.log(message);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
+
 const ResetPassword = async (req, res) => {
   try {
     const emailtemplate =
