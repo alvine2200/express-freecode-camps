@@ -8,6 +8,7 @@ const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 const xss = require("xss-clean");
 const helmet = require("helmet");
+var bodyParser = require("body-parser");
 
 const express = require("express");
 const app = express();
@@ -24,6 +25,7 @@ app.use(cors());
 app.use(xss());
 app.use(helmet());
 app.use(express.static("public"));
+//app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.set("view engine", "ejs");

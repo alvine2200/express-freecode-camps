@@ -108,12 +108,22 @@ const ChangePassword = async (req, res) => {
     });
   }
 };
+
+const sendMail = async (req, res) => {
+  const config = {
+    service: "gmail",
+    auth: {
+      user: process.env.user,
+      password: process.env.password,
+    },
+  };
+
+  const transporter=await nodemailer.createTransport(config);
+};
 const ResetPassword = async (req, res) => {
   try {
-    const text = {
-      status: "please set the password below",
-      mesage: "follow this link...",
-    };
+    const emailtemplate =
+      '<p>hello your reset password link expires in an hour, reset your password now <br/><a href="http://localhost/api/v1/reset_password/yhhytffd657y/yhfjusjhdfsfd@yumiydf123">Reset Password</a>  </p>';
     const transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT || 587,
@@ -126,9 +136,9 @@ const ResetPassword = async (req, res) => {
 
     await transporter.sendMail({
       from: process.env.USER_SENDING_EMAIL,
-      to: req.body.email,
-      subject: "Password_Reset_Email",
-      text: "hello there here is the reset link http://localhost:3000/api/vi/reset_password",
+      to: "llavualvine18@gmail.com",
+      subject: "Password Reset Email",
+      html: emailtemplate,
     });
     console.log("email sent");
     return res.status(200).json({
