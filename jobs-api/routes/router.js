@@ -15,7 +15,9 @@ const {
   updateJob,
   deleteJob,
 } = require("../controllers/JobsController");
+const { fileUpload } = require("../controllers/FileController");
 
+router.route("/file").post(fileUpload);
 router.route("/home").get(auth, home);
 router.route("/register").post(register);
 router.route("/login").post(login);
